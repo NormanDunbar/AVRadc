@@ -1,0 +1,74 @@
+#######################################
+# Syntax Coloring Map
+#######################################
+
+#######################################
+# WARNING: The "spaces" between the 
+# various keywords and the "KEYWORDn"
+# text are hard tab characters.
+#
+# Configure your editor to use hard tab
+# characters and not spaces.
+#######################################
+
+#######################################
+# Classes (KEYWORD1)
+#######################################
+AVRadc	KEYWORD1
+AVR_adc	KEYWORD1
+
+#######################################
+# Class Methods & Functions (KEYWORD2)
+#######################################
+onInterruptTriggered	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+start	KEYWORD2
+interrupt	KEYWORD2
+
+######################################
+# Others Constants (LITERAL1)
+#######################################
+
+refVoltage_t	LITERAL1
+testVoltage_t	LITERAL1
+alignment_t	LITERAL1
+prescaler_t	LITERAL1
+autotrigger_t	LITERAL1
+autosource_t	LITERAL1
+
+VREF_EXTERNAL_AREF	LITERAL1
+VREF_EXTERNAL_AVCC	LITERAL1
+VREF_INTERNAL	LITERAL1
+VTEST_A0_PC0	LITERAL1
+VTEST_A1_PC1	LITERAL1
+VTEST_A2_PC2	LITERAL1
+VTEST_A3_PC3	LITERAL1
+VTEST_A4_PC4	LITERAL1
+VTEST_A5_PC5	LITERAL1
+VTEST_A6	LITERAL1
+VTEST_A7	LITERAL1
+VTEST_TEMP_SENSOR	LITERAL1
+VTEST_BANDGAP	LITERAL1
+VTEST_GND	LITERAL1
+ALIGN_RIGHT	LITERAL1
+ALIGN_LEFT	LITERAL1
+PRESCALE_1	LITERAL1
+PRESCALE_2	LITERAL1
+PRESCALE_4	LITERAL1
+PRESCALE_8	LITERAL1
+PRESCALE_16	LITERAL1
+PRESCALE_32	LITERAL1
+PRESCALE_64	LITERAL1
+PRESCALE_128	LITERAL1
+AUTOTRGR_DISABLED	LITERAL1
+AUTOTRGR_ENABLED	LITERAL1
+AUTOTRGR_FREE_RUN	LITERAL1
+AUTOTRGR_AC	LITERAL1
+AUTOTRGR_INT0	LITERAL1
+AUTOTRGR_T0_MATCH_A	LITERAL1
+AUTOTRGR_T0_OVERFLOW	LITERAL1
+AUTOTRGR_T1_MATCH_B	LITERAL1
+AUTOTRGR_T1_OVERFLOW	LITERAL1
+AUTOTRGR_T1_INPCAP	LITERAL1
+

@@ -24,28 +24,28 @@ It will be called if, and only if, it has been attached to the interrupt by the 
 
 The reference voltage is the voltage that the ADC will compare the test voltage against. The permitted values are:
 
-* **AVR_adc::ADC_VREF_EXTERNAL_AREF**  The reference voltage is the voltage on the `AREF` pin.
-* **AVR_adc::ADC_VREF_EXTERNAL_AVCC**  The reference voltage is the voltage on the `AVCC` pin - the board supply voltage, normally, as the ATmega328P should be powered with the same (or very very similar) voltage on the `VCC` pin and the `AVCC` pin.
-* **AVR_adc::ADC_VREF_INTERNAL**  The internal 1.1V bandgap reference voltage will be used as the reference voltage.
+* **adc::VREF_EXTERNAL_AREF**  The reference voltage is the voltage on the `AREF` pin.
+* **adc::VREF_EXTERNAL_AVCC**  The reference voltage is the voltage on the `AVCC` pin - the board supply voltage, normally, as the ATmega328P should be powered with the same (or very very similar) voltage on the `VCC` pin and the `AVCC` pin.
+* **adc::VREF_INTERNAL**  The internal 1.1V bandgap reference voltage will be used as the reference voltage.
 
 
 #### testVoltage_t
 
 The test voltage is the pin where the ADC will measure the unknown voltage. The permitted values are:
 
-* **AVR_adc::ADC_VTEST_A0_PC0**     The ADC will measure the voltage on Arduino pin `A0`, AVR pin `PC0`.
-* **AVR_adc::ADC_VTEST_A1_PC1**     The ADC will measure the voltage on Arduino pin `A1`, AVR pin `PC1`.
-* **AVR_adc::ADC_VTEST_A2_PC2**     The ADC will measure the voltage on Arduino pin `A2`, AVR pin `PC2`.
-* **AVR_adc::ADC_VTEST_A3_PC3**     The ADC will measure the voltage on Arduino pin `A3`, AVR pin `PC3`.
-* **AVR_adc::ADC_VTEST_A4_PC4**     The ADC will measure the voltage on Arduino pin `A4`, AVR pin `PC4`.
-* **AVR_adc::ADC_VTEST_A5_PC5**     The ADC will measure the voltage on Arduino pin `A5`, AVR pin `PC5`.
-* **AVR_adc::ADC_VTEST_A6**     The ADC will measure the voltage on Arduino pin `A6`, only available on the surface mount ATmega328PAU microcontroller.
-* **AVR_adc::ADC_VTEST_A7**     The ADC will measure the voltage on Arduino pin `A7`, only available on the surface mount ATmega328PAU microcontroller.
-* **AVR_adc::ADC_VTEST_TEMP_SENSOR**     The ADC will measure the voltage on the internal temperature monitoring sensor. This option requires that the reference voltage be `AVR_adc::ADC_VREF_INTERNAL` and the auto triggering is not enabled.
-* **AVR_adc::ADC_VTEST_BANDGAP**     The ADC will measure the internal 1.1V voltage as opposed to using any external pins.
-* **AVR_adc::ADC_VTEST_GND**     The ADC will measure the ground voltage. 
+* **adc::VTEST_A0_PC0**     The ADC will measure the voltage on Arduino pin `A0`, AVR pin `PC0`.
+* **adc::VTEST_A1_PC1**     The ADC will measure the voltage on Arduino pin `A1`, AVR pin `PC1`.
+* **adc::VTEST_A2_PC2**     The ADC will measure the voltage on Arduino pin `A2`, AVR pin `PC2`.
+* **adc::VTEST_A3_PC3**     The ADC will measure the voltage on Arduino pin `A3`, AVR pin `PC3`.
+* **adc::VTEST_A4_PC4**     The ADC will measure the voltage on Arduino pin `A4`, AVR pin `PC4`.
+* **adc::VTEST_A5_PC5**     The ADC will measure the voltage on Arduino pin `A5`, AVR pin `PC5`.
+* **adc::VTEST_A6**     The ADC will measure the voltage on Arduino pin `A6`, only available on the surface mount ATmega328PAU microcontroller.
+* **adc::VTEST_A7**     The ADC will measure the voltage on Arduino pin `A7`, only available on the surface mount ATmega328PAU microcontroller.
+* **adc::VTEST_TEMP_SENSOR**     The ADC will measure the voltage on the internal temperature monitoring sensor. This option requires that the reference voltage be `adc::VREF_INTERNAL` and the auto triggering is not enabled.
+* **adc::VTEST_BANDGAP**     The ADC will measure the internal 1.1V voltage as opposed to using any external pins.
+* **adc::VTEST_GND**     The ADC will measure the ground voltage. 
 
-The latter two are a little weird. If you use `AVR_adc::ADC_VTEST_BANDGAP` then the ADC always reads 227-229 (at least, mine does) which works out at 1.11-1.12V. Using `AVR_adc::ADC_VTEST_GND` returns zero on my devices, representing GND. I assume that these are perhaps configuration options?
+The latter two are a little weird. If you use `adc::VTEST_BANDGAP` then the ADC always reads 227-229 (at least, mine does) which works out at 1.11-1.12V. Using `adc::VTEST_GND` returns zero on my devices, representing GND. I assume that these are perhaps configuration options?
 
 
 #### alignment_t
@@ -53,30 +53,30 @@ The latter two are a little weird. If you use `AVR_adc::ADC_VTEST_BANDGAP` then 
 The ADC can return it's 10 bit result in one of two ways. The two parameters permitted are:
 
 
-* **AVR_adc::ADC_ALIGN_RIGHT**  In Right alignment, the 10 bit results is returned in normal mode where the highest bits are bits 9 and 8 of the result, and the lowest bits are bits 7 through 0. Bits 15 through 10 are garbage. 
-* **AVR_adc::ADC_ALIGN_LEFT**  In left alignment, the result comes with the highest bits in bits 15 through 8 or the result, and the two lowest bits are in bits 7 and 6. The remaining bits, 5 through 0, are garbage.
+* **adc::ALIGN_RIGHT**  In Right alignment, the 10 bit results is returned in normal mode where the highest bits are bits 9 and 8 of the result, and the lowest bits are bits 7 through 0. Bits 15 through 10 are garbage. 
+* **adc::ALIGN_LEFT**  In left alignment, the result comes with the highest bits in bits 15 through 8 or the result, and the two lowest bits are in bits 7 and 6. The remaining bits, 5 through 0, are garbage.
 
 #### prescaler_t
 
 The ADC must be clocked at a frequency between 50 and 200 KHz. The system clock, 16 MHz on an Arduino, needs to be scaled down to suit. The permitted prescaler values are:
 
-* **AVR_adc::ADC_PRESCALE_1**   The system clock frequency is divided by 1.
-* **AVR_adc::ADC_PRESCALE_2**   The system clock frequency is divided by 2.
-* **AVR_adc::ADC_PRESCALE_4**   The system clock frequency is divided by 4.
-* **AVR_adc::ADC_PRESCALE_8**   The system clock frequency is divided by 8.
-* **AVR_adc::ADC_PRESCALE_16**   The system clock frequency is divided by 16.
-* **AVR_adc::ADC_PRESCALE_32**   The system clock frequency is divided by 32.
-* **AVR_adc::ADC_PRESCALE_64**   The system clock frequency is divided by 64.
-* **AVR_adc::ADC_PRESCALE_128**   The system clock frequency is divided by 128.
+* **adc::PRESCALE_1**   The system clock frequency is divided by 1.
+* **adc::PRESCALE_2**   The system clock frequency is divided by 2.
+* **adc::PRESCALE_4**   The system clock frequency is divided by 4.
+* **adc::PRESCALE_8**   The system clock frequency is divided by 8.
+* **adc::PRESCALE_16**   The system clock frequency is divided by 16.
+* **adc::PRESCALE_32**   The system clock frequency is divided by 32.
+* **adc::PRESCALE_64**   The system clock frequency is divided by 64.
+* **adc::PRESCALE_128**   The system clock frequency is divided by 128.
 
-The default on an Arduino is `AVR_adc::ADC_PRESCALE_128` which gives a frequency of 125 KHz. You can run the ADC at a higher frequency but the results will not give the full 10 bit resolution.
+The default on an Arduino is `adc::PRESCALE_128` which gives a frequency of 125 KHz. You can run the ADC at a higher frequency but the results will not give the full 10 bit resolution.
 
 #### autotrigger_t
 
 The ADC can be run in single shot or auto triggering modes. The permitted values are:
 
-* **AVR_adc::ADC_AUTOTRGR_DISABLED**    The ADC is in single shot mode.
-* **AVR_adc::ADC_AUTOTRGR_ENABLED**     The ADC will self trigger, after being manually started.
+* **adc::AUTOTRGR_DISABLED**    The ADC is in single shot mode.
+* **adc::AUTOTRGR_ENABLED**     The ADC will self trigger, after being manually started.
 
 #### autosource_t
 
@@ -84,14 +84,14 @@ If the ADC is auto triggereing, then one of 8 different sources can be configure
 
 The permitted values are:
 
-* **AVR_adc::ADC_AUTOTRGR_FREE_RUN**    The ADC will start a new conversion as soon as the current one completes.
-* **AVR_adc::ADC_AUTOTRGR_AC**  The ADC will start a new conversion whenever the Analog Converter's interrupt flag is set.
-* **AVR_adc::ADC_AUTOTRGR_INT0**  The ADC will start a new conversion whenever the `INT0` interrupt flag is set.
-* **AVR_adc::ADC_AUTOTRGR_T0_MATCH_A**  The ADC will start a new conversion whenever Timer/counter 0's compare match A interrupt flag is set.
-* **AVR_adc::ADC_AUTOTRGR_T0_OVERFLOW**  The ADC will start a new conversion whenever  Timer/counter 0's overflow interrupt flag is set.
-* **AVR_adc::ADC_AUTOTRGR_T1_MATCH_B**  The ADC will start a new conversion whenever Timer/counter 1's compare match B interrupt flag is set.
-* **AVR_adc::ADC_AUTOTRGR_T1_OVERFLOW**  The ADC will start a new conversion whenever  Timer/counter 1's overflow interrupt flag is set.
-* **AVR_adc::ADC_AUTOTRGR_T1_INPCAP**  The ADC will start a new conversion whenever Timer/counter 1's Input capture Unit's interrupt flag is set.
+* **adc::AUTOTRGR_FREE_RUN**    The ADC will start a new conversion as soon as the current one completes.
+* **adc::AUTOTRGR_AC**  The ADC will start a new conversion whenever the Analog Converter's interrupt flag is set.
+* **adc::AUTOTRGR_INT0**  The ADC will start a new conversion whenever the `INT0` interrupt flag is set.
+* **adc::AUTOTRGR_T0_MATCH_A**  The ADC will start a new conversion whenever Timer/counter 0's compare match A interrupt flag is set.
+* **adc::AUTOTRGR_T0_OVERFLOW**  The ADC will start a new conversion whenever  Timer/counter 0's overflow interrupt flag is set.
+* **adc::AUTOTRGR_T1_MATCH_B**  The ADC will start a new conversion whenever Timer/counter 1's compare match B interrupt flag is set.
+* **adc::AUTOTRGR_T1_OVERFLOW**  The ADC will start a new conversion whenever  Timer/counter 1's overflow interrupt flag is set.
+* **adc::AUTOTRGR_T1_INPCAP**  The ADC will start a new conversion whenever Timer/counter 1's Input capture Unit's interrupt flag is set.
 
 
 ### Functions
@@ -128,8 +128,8 @@ For example:
 
 ```
 // Configure the ADC.
-bool ok = AVRadc.begin(AVR_adc::ADC_VREF_EXTERNAL_AREF,
-                       AVR_adc::ADC_VTEST_A0_PC0);
+bool ok = AVRadc.begin(adc::VREF_EXTERNAL_AREF,
+                       adc::VTEST_A0_PC0);
 
 if (ok) {
     // Attach my interrupt function.
@@ -255,12 +255,12 @@ void setup() {
     // Initialise the ADC to run in free running mode
     // reading data from pin A3 with the reference 
     // voltage taken from pin AVCC.
-    AVRadc.begin(AVR_adc::ADC_VREF_EXTERNAL_AVCC,
-                 AVR_adc::ADC_VTEST_A3_PC3,
-                 AVR_adc::ADC_ALIGN_RIGHT,
-                 AVR_adc::ADC_PRESCALE_128,
-                 AVR_adc::ADC_AUTOTRGR_ENABLED,
-                 AVR_adc::ADC_AUTOTRGR_FREE_RUN);
+    AVRadc.begin(adc::VREF_EXTERNAL_AVCC,
+                 adc::VTEST_A3_PC3,
+                 adc::ALIGN_RIGHT,
+                 adc::PRESCALE_128,
+                 adc::AUTOTRGR_ENABLED,
+                 adc::AUTOTRGR_FREE_RUN);
 
     // Config complete, start the ADC.
     AVRadc.start();
@@ -276,10 +276,4 @@ void loop() {
     Serial.println(adcValue);
 }```
 
-### Example PlatformIO Sketch
-
-The following code shows a similar sketch to the Arduino one above. 
-
-```
-```
 

@@ -25,6 +25,4 @@ As of the time of typing, I have not built this library into a format suitable f
 
 
 Norman Dunbar
-norman@dunbar-it.co.uk
-
 27 October 2020 (onwards!).

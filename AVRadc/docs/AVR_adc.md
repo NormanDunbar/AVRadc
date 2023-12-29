@@ -274,6 +274,148 @@ void loop() {
     // Display the current ADC reading.
     Serial.print("ADC Value: ");
     Serial.println(adcValue);
-}```
+}
+```
 
+### Example PlatformIO Sketch
+
+The Arduino sketch above can be replicated in AVR C++ for the PlatformIO system, as per the following code. Note, we have to do our own USART initialisation etc! Thre's no Arduino handholding here I'm afraid.
+
+```
+//=============================================================
+// A small test of the AVRadc object which allows easy use of
+// the ADC's interrupt. 
+//
+// Connect a potentiometer to VCC and GND, then connect the
+// wiper to pin A3. The ADC will read from that pin and will
+// display the resulting conversion value on the Serial
+// Monitor.
+//
+// Each time that the ADC has a new value, it will call the
+// adcInterrupt() function. The new value will be copied to a
+// volatile variable used in the loop function to display the
+// value on the Serial Monitor.
+//
+// NOTE: The speed at which the ADC does conversions far far 
+// outweighs the speed at which the loop() function can be
+// called fast enough to display the results! This example
+// definitely misses a number of conversion values as they are
+// written into adcValue by the interrupt function, but are 
+// then overwritten by the next conversion result while loop()
+// is still getting its act together!
+//
+// Norman Dunbar
+// 4 November 2020.
+//=============================================================
+#include "AVR_adc.h"
+#include <stdlib.h>
+#include <util/delay.h>
+
+// Somewhere to hold ADC values for loop() to use.
+volatile uint16_t adcValue = 0;
+
+
+// The interrupt routine.
+void adcInterrupt(uint16_t adcReading) {
+    // Grab the ADC reading for display 
+    // on the Serial Monitor.
+    adcValue = adcReading;
+}
+
+
+// Initialise the USART to 8-n-1 at 9600 baud.
+void initUSART_9600() {
+	// POwer up the USART.
+	PRR &= ~(1 << PRUSART0);
+	
+	// Double speed mode
+	UCSR0A = (1 << U2X0);
+	
+	// 8-N-1.
+	UCSR0C = (1 << UCSZ01)|(1 << UCSZ00);
+	
+	// 9600 baud.
+	UBRR0H = 0;
+	UBRR0L = 207;
+	
+	// Enable TX only.
+	UCSR0B |= (1 << TXEN0);
+}
+
+
+// Print a single character to the USART.
+void USARTputc(const uint8_t c) {
+	// Wait for the USART to be ready.
+	while (!(UCSR0A & (1 << UDRE0))) ; // Wait until UDRE0 set.
+	
+	// Transmit a byte.
+	UDR0 = c;
+}
+
+
+// Print a text strinmg to the USART.
+void USARTprintText(const char *s) {
+	// Print each character.
+	while (*s) {
+		USARTputc(*s++);
+	}
+}
+
+
+// Print a signed 16 bit number to the USART.
+void USARTprintNumber(const int16_t n) {
+	// Converstion buffer, big enough for "65536\0".
+	char buffer[6] = {0};
+	
+	// Convert from number to text. Needs stdlib.h.
+	if (itoa((int)n, &buffer[0], 10) != NULL ) {
+		USARTprintText(buffer);
+	} 	
+}
+
+
+int main() {
+	//--------------------------------------------------------
+	//                                                   SETUP
+	//--------------------------------------------------------
+    initUSART_9600();
+
+    // Call adcInterrupt() every time the
+    // ADC has a new value.
+    AVRadc.onInterruptTriggered(adcInterrupt);
+
+    // Initialise the ADC to run in free running mode
+    // reading data from pin A3 with the reference 
+    // voltage taken from pin AVCC.
+    AVRadc.begin(adc::VREF_EXTERNAL_AVCC,
+                 adc::VTEST_A3_PC3,
+                 adc::ALIGN_RIGHT,
+                 adc::PRESCALE_128,
+                 adc::AUTOTRGR_ENABLED,
+                 adc::AUTOTRGR_FREE_RUN);
+
+    // Config complete, start the ADC.
+    AVRadc.start();
+
+    // Allow the ADC to settle down.
+    _delay_ms(20);
+    
+    // Don't forget. ADC won't work without it!
+    sei();
+
+
+	//--------------------------------------------------------
+	//                                                    LOOP
+	//--------------------------------------------------------
+	while (1) {
+    	// Display the current ADC reading.
+    	USARTprintText("ADC Value: ");
+    	USARTprintNumber(adcValue);
+    	USARTprintText("\r\n");
+    	
+    	// Delay a bit.
+    	_delay_ms(250);
+    }
+}
+```
 
